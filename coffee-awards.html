@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brew Elite — Coffee Brand Awards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#C8A96E;--gold-light:#E8D5A8;--gold-dark:#8B6914;--espresso:#0A0604;--cream:#FFF8F0;--latte:#6B5B50;--mocha:#1A0E0A;--text:#F5EDE6}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--espresso);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* CURSOR */
+.cursor{position:fixed;top:0;left:0;width:20px;height:20px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:width .3s,height .3s,border-color .3s,background .3s,margin .3s}
+.cursor-dot{position:fixed;top:0;left:0;width:5px;height:5px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:opacity .3s}
+.cursor.hover{width:60px;height:60px;margin:-20px;background:rgba(200,169,110,0.06);border-color:var(--gold-light)}
+.cursor.hover+.cursor-dot{opacity:0}
+
+/* PRELOADER */
+.preloader{position:fixed;inset:0;z-index:10000;background:var(--espresso);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease}
+.preloader.done{opacity:0;visibility:hidden;pointer-events:none}
+.preloader-logo{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:var(--cream);margin-bottom:2rem;overflow:hidden}
+.preloader-logo span{display:inline-block;animation:pl .5s cubic-bezier(.16,1,.3,1) forwards;opacity:0;transform:translateY(100%)}
+.preloader-bar{width:140px;height:2px;background:rgba(200,169,110,0.1);border-radius:2px;overflow:hidden}
+.preloader-bar::after{content:'';display:block;width:0;height:100%;background:var(--gold);animation:pf 2.2s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes pl{to{opacity:1;transform:translateY(0)}}
+@keyframes pf{to{width:100%}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 3rem;background:transparent;transition:all .5s}
+nav.scrolled{background:rgba(10,6,4,0.92);backdrop-filter:blur(20px);padding:1rem 3rem;border-bottom:1px solid rgba(200,169,110,0.06)}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;letter-spacing:4px;text-transform:uppercase;color:var(--cream)}
+.logo span{color:var(--gold)}
+nav ul{display:flex;gap:2.5rem;list-style:none}
+nav a{color:rgba(245,237,230,0.5);text-decoration:none;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:color .3s;position:relative}
+nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+nav a:hover{color:var(--cream)}
+nav a:hover::after{width:100%}
+.nav-cta{padding:.55rem 1.2rem;border:1px solid rgba(200,169,110,0.3);color:var(--gold)!important;transition:all .4s;border-radius:2px}
+.nav-cta:hover{background:var(--gold);color:var(--espresso)!important}
+.nav-cta::after{display:none!important}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(50px);transition:all .9s cubic-bezier(.16,1,.3,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.rv1{transition-delay:.1s}.rv2{transition-delay:.2s}.rv3{transition-delay:.3s}.rv4{transition-delay:.4s}
+
+/* SECTION COMMON */
+section{padding:8rem 3rem}
+.sl{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.sl::before{content:'';width:30px;height:1px;background:var(--gold);opacity:.3}
+.st{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;line-height:1.1;margin-bottom:1.5rem}
+.st em{color:var(--gold);font-style:italic}
+
+/* ══════════════════════════════════════ HERO (VIDEO) */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:0 3rem 6rem}
+.hero-video-wrap{position:absolute;inset:0;z-index:0}
+.hero-video-wrap video{width:100%;height:100%;object-fit:cover}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(10,6,4,1) 0%,rgba(10,6,4,0.7) 35%,rgba(10,6,4,0.4) 60%,rgba(10,6,4,0.6) 100%)}
+.hero-grain{position:absolute;inset:0;z-index:1;opacity:.04;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-content{position:relative;z-index:2;max-width:900px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border:1px solid rgba(200,169,110,0.2);border-radius:100px;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;font-weight:500;opacity:0;animation:fu .8s 2.5s forwards}
+.hero-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:900;line-height:.92;margin-bottom:1.5rem}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln span{display:inline-block;transform:translateY(110%);animation:lr .9s cubic-bezier(.16,1,.3,1) forwards}
+.hero h1 .ln:nth-child(2) span{animation-delay:.12s}
+.hero h1 .ln:nth-child(3) span{animation-delay:.24s}
+.hero h1 em{font-style:italic;color:var(--gold);font-family:'Playfair Display',serif}
+@keyframes lr{to{transform:translateY(0)}}
+@keyframes fu{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.hero-desc{font-size:1rem;color:rgba(200,185,170,0.7);max-width:420px;line-height:1.7;opacity:0;animation:fu .8s 2.8s forwards}
+.hero-scroll{position:absolute;bottom:2.5rem;left:3rem;display:flex;align-items:center;gap:1rem;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--latte);z-index:2;opacity:0;animation:fu .8s 3s forwards}
+.scroll-ln{width:40px;height:1px;background:rgba(200,169,110,0.2);position:relative;overflow:hidden}
+.scroll-ln::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:var(--gold);animation:sl 2s infinite}
+@keyframes sl{to{left:100%}}
+.hero-year{position:absolute;right:3rem;bottom:5rem;z-index:2;opacity:0;animation:fu .8s 3.2s forwards}
+.hero-year .yr{font-family:'Space Grotesk',sans-serif;font-size:clamp(5rem,12vw,10rem);font-weight:700;color:rgba(200,169,110,0.06);line-height:1}
+
+/* ══════════════════════════════════════ MARQUEE */
+.marquee{border-top:1px solid rgba(200,169,110,0.06);border-bottom:1px solid rgba(200,169,110,0.06);padding:1rem 0;overflow:hidden;background:rgba(200,169,110,0.015)}
+.marquee-track{display:flex;width:max-content;animation:ms 30s linear infinite}
+.mi{font-family:'Space Grotesk',sans-serif;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--latte);white-space:nowrap;padding:0 2rem;display:flex;align-items:center;gap:1.5rem}
+.mi .s{width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.3}
+@keyframes ms{to{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════ ABOUT */
+.about{background:var(--espresso);position:relative}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;max-width:1300px;margin:0 auto;align-items:center}
+.about-img-wrap{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:3/4}
+.about-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease;filter:brightness(0.85) saturate(0.9)}
+.about-img-wrap:hover img{transform:scale(1.05)}
+.about-img-wrap::after{content:'';position:absolute;inset:0;border:1px solid rgba(200,169,110,0.08);border-radius:4px;pointer-events:none}
+.about-overlay-tag{position:absolute;bottom:1.5rem;left:1.5rem;background:rgba(10,6,4,0.7);backdrop-filter:blur(10px);padding:.5rem 1rem;border:1px solid rgba(200,169,110,0.15);border-radius:2px;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.about-num{position:absolute;top:-1rem;left:-1rem;font-family:'Playfair Display',serif;font-size:8rem;font-weight:900;color:var(--gold);opacity:.04;line-height:1}
+.about-text p{color:var(--latte);line-height:1.8;margin-bottom:1.5rem;font-size:.95rem}
+.about-text strong{color:var(--cream);font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(200,169,110,0.06)}
+.stat-n{font-family:'Space Grotesk',sans-serif;font-size:2.5rem;font-weight:700;color:var(--gold);line-height:1}
+.stat-l{font-size:.62rem;color:var(--latte);text-transform:uppercase;letter-spacing:2px;margin-top:.3rem}
+
+/* ══════════════════════════════════════ GALLERY */
+.gallery-strip{padding:0;overflow:hidden;background:var(--mocha)}
+.gallery-track{display:flex;gap:1rem;padding:1.5rem 3rem;animation:gs 45s linear infinite;width:max-content}
+.gallery-track:hover{animation-play-state:paused}
+.gallery-item{width:280px;height:180px;border-radius:4px;overflow:hidden;flex-shrink:0;position:relative}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s,filter .6s;filter:brightness(0.7) saturate(0.85)}
+.gallery-item:hover img{transform:scale(1.08);filter:brightness(0.9) saturate(1)}
+.gallery-item::after{content:attr(data-label);position:absolute;bottom:.8rem;left:.8rem;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(10,6,4,0.6);backdrop-filter:blur(6px);padding:.3rem .6rem;border-radius:2px}
+@keyframes gs{to{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════ WINNERS */
+.winners{background:var(--espresso);position:relative}
+.winners-grid{max-width:1200px;margin:0 auto}
+.wr{display:grid;grid-template-columns:70px 80px 1fr 100px;gap:1.5rem;align-items:center;padding:2rem 0;border-bottom:1px solid rgba(200,169,110,0.06);transition:all .4s;cursor:none}
+.wr:first-child{border-top:1px solid rgba(200,169,110,0.06)}
+.wr:hover{padding-left:1rem;background:rgba(200,169,110,0.02)}
+.wr-img{width:70px;height:70px;border-radius:50%;overflow:hidden;border:2px solid rgba(200,169,110,0.1);transition:border-color .3s;flex-shrink:0}
+.wr:hover .wr-img{border-color:var(--gold)}
+.wr-img img{width:100%;height:100%;object-fit:cover}
+.wr-rank{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold);opacity:.25;transition:opacity .3s;min-width:50px;text-align:center}
+.wr:hover .wr-rank{opacity:.6}
+.wr-origin{font-size:.6rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.3rem;font-weight:600}
+.wr-name{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2vw,1.5rem);font-weight:700;margin-bottom:.4rem;transition:color .3s}
+.wr:hover .wr-name{color:var(--gold)}
+.wr-desc{color:var(--latte);font-size:.85rem;line-height:1.6}
+.wr-score{text-align:center}
+.score-n{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--gold);transition:transform .3s}
+.wr:hover .score-n{transform:scale(1.1)}
+.score-l{font-size:.52rem;color:var(--latte);text-transform:uppercase;letter-spacing:2px;margin-top:.15rem}
+
+/* ══════════════════════════════════════ PARALLAX DIVIDER */
+.px-div{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.px-bg{position:absolute;inset:-20%;transition:transform .1s linear}
+.px-bg video{width:100%;height:100%;object-fit:cover;filter:brightness(0.2) saturate(0.5)}
+.px-overlay{position:absolute;inset:0;background:rgba(10,6,4,0.5)}
+.px-text{position:relative;z-index:2;font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:var(--cream);text-align:center;line-height:1;text-shadow:0 0 80px rgba(200,169,110,0.1)}
+
+/* ══════════════════════════════════════ CATEGORIES */
+.categories{background:var(--mocha);position:relative;overflow:hidden}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;max-width:1300px;margin:0 auto;background:rgba(200,169,110,0.05)}
+.cat-item{background:var(--mocha);padding:2.5rem;transition:all .5s;cursor:none;position:relative;overflow:hidden}
+.cat-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,169,110,0.04),transparent);opacity:0;transition:opacity .4s}
+.cat-item:hover::before{opacity:1}
+.cat-item:hover{background:rgba(26,14,10,0.7)}
+.cat-icon{font-size:2rem;margin-bottom:1.2rem;transition:transform .4s}
+.cat-item:hover .cat-icon{transform:translateY(-5px) rotate(-5deg)}
+.cat-item h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.6rem;position:relative;z-index:2}
+.cat-item p{color:var(--latte);font-size:.83rem;line-height:1.7;position:relative;z-index:2}
+.cat-tag{display:inline-block;margin-top:1rem;padding:.25rem .7rem;border:1px solid rgba(200,169,110,0.12);border-radius:100px;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);transition:all .3s;position:relative;z-index:2}
+.cat-item:hover .cat-tag{background:var(--gold);color:var(--espresso)}
+
+/* ══════════════════════════════════════ JUDGES */
+.judges{background:var(--espresso)}
+.judges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3rem;max-width:1100px;margin:0 auto}
+.judge{text-align:center;cursor:none}
+.judge-img{width:140px;height:140px;border-radius:50%;margin:0 auto 1.2rem;overflow:hidden;border:2px solid rgba(200,169,110,0.08);transition:all .5s cubic-bezier(.16,1,.3,1);position:relative}
+.judge-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.3) brightness(0.85);transition:all .5s}
+.judge:hover .judge-img{border-color:var(--gold);transform:scale(1.05)}
+.judge:hover .judge-img img{filter:grayscale(0) brightness(1)}
+.judge-img::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(200,169,110,0.05);transition:all .4s}
+.judge:hover .judge-img::after{border-color:rgba(200,169,110,0.2);inset:-8px}
+.judge h4{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:.25rem}
+.judge-role{font-size:.6rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:600}
+
+/* ══════════════════════════════════════ TIMELINE */
+.timeline-sec{background:var(--mocha)}
+.tl{max-width:800px;margin:0 auto;position:relative}
+.tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),rgba(200,169,110,0.05))}
+.tl-item{position:relative;padding-left:3rem;margin-bottom:3rem}
+.tl-item::before{content:'';position:absolute;left:-5px;top:.5rem;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--mocha);transition:transform .3s}
+.tl-item:hover::before{transform:scale(1.5)}
+.tl-date{font-size:.58rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:.3rem;font-weight:600}
+.tl-item h4{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.4rem}
+.tl-item p{color:var(--latte);font-size:.85rem;line-height:1.7;max-width:460px}
+
+/* ══════════════════════════════════════ FORM */
+.form-section{background:linear-gradient(160deg,var(--espresso),var(--mocha));position:relative;overflow:hidden}
+.form-section .form-bg-video{position:absolute;inset:0;z-index:0}
+.form-section .form-bg-video video{width:100%;height:100%;object-fit:cover;opacity:.08}
+.form-box{max-width:600px;margin:0 auto;position:relative;z-index:2}
+.form-group{margin-bottom:1.2rem;text-align:left}
+.form-group label{display:block;font-size:.55rem;color:var(--latte);letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem}
+.form-group input,.form-group textarea{width:100%;padding:.9rem 1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,110,0.08);border-radius:2px;color:var(--cream);font-size:.88rem;outline:none;font-family:'Inter',sans-serif;transition:all .3s}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--gold);background:rgba(200,169,110,0.03)}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-submit{padding:.9rem 2.5rem;background:var(--gold);color:var(--espresso);border:none;font-weight:600;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .4s;font-family:'Inter',sans-serif;border-radius:2px}
+.form-submit:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,169,110,0.2)}
+
+/* ══════════════════════════════════════ FOOTER */
+footer{border-top:1px solid rgba(200,169,110,0.06);padding:3rem;display:flex;justify-content:space-between;align-items:center}
+footer .logo{font-size:.85rem}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{color:var(--latte);text-decoration:none;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;transition:color .3s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{color:rgba(107,91,80,0.35);font-size:.68rem;letter-spacing:1px}
+
+/* ══════════════════════════════════════ RESPONSIVE */
+@media(max-width:1024px){
+  section{padding:5rem 2rem}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .judges-grid{grid-template-columns:repeat(2,1fr);gap:2rem}
+  footer{flex-direction:column;gap:1.5rem;text-align:center}
+  .hero-year{display:none}
+}
+@media(max-width:768px){
+  .cursor,.cursor-dot{display:none}
+  nav ul{display:none}
+  section{padding:3.5rem 1.5rem}
+  .hero{padding:0 1.5rem 3rem}
+  .wr{grid-template-columns:60px 1fr;gap:.8rem;padding-left:0!important}
+  .wr-img,.wr-score{display:none}
+  .wr-rank{min-width:auto}
+  .cat-grid{grid-template-columns:1fr}
+  .judges-grid{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr;gap:1.5rem}
+  .gallery-track{padding:1rem}
+  .gallery-item{width:220px;height:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-logo">
+    <span>B</span><span>R</span><span>E</span><span>W</span>&nbsp;<span>E</span><span>L</span><span>I</span><span>T</span><span>E</span>
+  </div>
+  <div class="preloader-bar"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">Brew<span>.</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#winners">Winners</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#judges">Judges</a></li>
+    <li><a href="#contact" class="nav-cta">Enter Awards</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════════════════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=1920&q=80">
+      <source src="https://videos.pexels.com/video-files/20772454/20772454-uhd_3840_2160_24fps.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span>Annual Awards 2026</div>
+    <h1>
+      <span class="ln"><span>The World's</span></span>
+      <span class="ln"><span><em>Finest</em></span></span>
+      <span class="ln"><span>Coffee</span></span>
+    </h1>
+    <p class="hero-desc">Celebrating excellence in roasting, sustainability, and the art of the perfect cup. Discover the brands shaping the future of specialty coffee.</p>
+  </div>
+  <div class="hero-scroll"><div class="scroll-ln"></div>Scroll</div>
+  <div class="hero-year"><div class="yr">2026</div></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <div class="mi">Best Single Origin <span class="s"></span></div>
+    <div class="mi">Best Blend <span class="s"></span></div>
+    <div class="mi">Sustainability Champion <span class="s"></span></div>
+    <div class="mi">Innovation in Roasting <span class="s"></span></div>
+    <div class="mi">Best Packaging <span class="s"></span></div>
+    <div class="mi">Rising Star <span class="s"></span></div>
+    <div class="mi">Best Single Origin <span class="s"></span></div>
+    <div class="mi">Best Blend <span class="s"></span></div>
+    <div class="mi">Sustainability Champion <span class="s"></span></div>
+    <div class="mi">Innovation in Roasting <span class="s"></span></div>
+    <div class="mi">Best Packaging <span class="s"></span></div>
+    <div class="mi">Rising Star <span class="s"></span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-num">01</div>
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80" alt="Coffee shop latte art" loading="lazy">
+      <div class="about-overlay-tag">Est. 2017 — Lisbon, Portugal</div>
+    </div>
+    <div class="about-text">
+      <div class="sl reveal">Our Story</div>
+      <h2 class="st reveal rv1">Honoring the <em>art</em> of coffee</h2>
+      <p class="reveal rv2">For <strong>nine years</strong>, the Brew Elite Awards have recognized the world's most exceptional coffee brands — from single-origin roasters in Ethiopia to innovative sustainability leaders in Scandinavia.</p>
+      <p class="reveal rv3">Every bean tells a story. Our rigorous judging process evaluates <strong>flavor profile</strong>, <strong>sourcing ethics</strong>, <strong>roasting precision</strong>, and <strong>brand impact</strong> across 12 countries and 200+ submissions annually.</p>
+      <div class="stats reveal rv4">
+        <div><div class="stat-n">200+</div><div class="stat-l">Submissions</div></div>
+        <div><div class="stat-n">12</div><div class="stat-l">Countries</div></div>
+        <div><div class="stat-n">9</div><div class="stat-l">Years</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="gallery-track">
+    <div class="gallery-item" data-label="Ethiopia"><img src="https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=600&q=75" alt="Ethiopia coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Colombia"><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=75" alt="Colombia coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Italy"><img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&q=75" alt="Italian coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Brazil"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&q=75" alt="Brazil coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Kenya"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=75" alt="Kenya coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Guatemala"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=75" alt="Guatemala coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Vietnam"><img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=600&q=75" alt="Vietnam coffee" loading="lazy"></div>
+    <div class="gallery-item" data-label="Japan"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=75" alt="Japan coffee" loading="lazy"></div>
+    <!-- duplicate for loop -->
+    <div class="gallery-item" data-label="Ethiopia"><img src="https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Colombia"><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Italy"><img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Brazil"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Kenya"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Guatemala"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Vietnam"><img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=600&q=75" alt="" loading="lazy"></div>
+    <div class="gallery-item" data-label="Japan"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=75" alt="" loading="lazy"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ WINNERS -->
+<section class="winners" id="winners">
+  <div class="sl reveal">🏆 2026 Champions</div>
+  <h2 class="st reveal rv1" style="margin-bottom:3rem">The winners</h2>
+  <div class="winners-grid">
+    <div class="wr reveal">
+      <div class="wr-rank">#1</div>
+      <div class="wr-img"><img src="https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=200&q=75" alt="Yirgacheve" loading="lazy"></div>
+      <div>
+        <div class="wr-origin">Ethiopia · Single Origin</div>
+        <div class="wr-name">Yirgacheve Reserve — Abyssinia Roasters</div>
+        <div class="wr-desc">A breathtaking light roast with notes of jasmine, bergamot, and wild blueberry. Sourced from smallholder farms at 2,000m elevation.</div>
+      </div>
+      <div class="wr-score"><div class="score-n">98</div><div class="score-l">Score</div></div>
+    </div>
+    <div class="wr reveal">
+      <div class="wr-rank">#2</div>
+      <div class="wr-img"><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=200&q=75" alt="Colombia" loading="lazy"></div>
+      <div>
+        <div class="wr-origin">Colombia · Blend</div>
+        <div class="wr-name">Finca La Esperanza — Tierra Negra</div>
+        <div class="wr-desc">A harmonious blend of Huila and Nariño beans delivering rich caramel sweetness with bright citrus acidity.</div>
+      </div>
+      <div class="wr-score"><div class="score-n">96</div><div class="score-l">Score</div></div>
+    </div>
+    <div class="wr reveal">
+      <div class="wr-rank">#3</div>
+      <div class="wr-img"><img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=200&q=75" alt="Tokyo" loading="lazy"></div>
+      <div>
+        <div class="wr-origin">Japan · Specialty Roast</div>
+        <div class="wr-name">Kissaten Blend — Tokyo Dawn Coffee</div>
+        <div class="wr-desc">A masterful dark roast inspired by Japanese kissaten culture. Deep chocolate, toasted walnut, and smoked cherry.</div>
+      </div>
+      <div class="wr-score"><div class="score-n">94</div><div class="score-l">Score</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ PARALLAX -->
+<div class="px-div">
+  <div class="px-bg" id="pxBg">
+    <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80">
+      <source src="https://videos.pexels.com/video-files/26885213/12025951_3840_2160_25fps.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="px-overlay"></div>
+  <div class="px-text">Brew Elite</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ CATEGORIES -->
+<section class="categories" id="categories">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="sl reveal">Award Categories</div>
+    <h2 class="st reveal rv1" style="margin-bottom:3rem">Six pillars of <em>excellence</em></h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-item reveal">
+      <div class="cat-icon">🌿</div>
+      <h3>Best Single Origin</h3>
+      <p>Outstanding flavor and character from a single farm or region, showcasing terroir at its finest.</p>
+      <div class="cat-tag">18 Finalists</div>
+    </div>
+    <div class="cat-item reveal rv1">
+      <div class="cat-icon">🔄</div>
+      <h3>Best Blend</h3>
+      <p>Masterful composition of multiple origins into a harmonious, complex cup profile.</p>
+      <div class="cat-tag">14 Finalists</div>
+    </div>
+    <div class="cat-item reveal rv2">
+      <div class="cat-icon">🌍</div>
+      <h3>Sustainability Champion</h3>
+      <p>Brands leading the way in ethical sourcing, carbon reduction, and farmer partnerships.</p>
+      <div class="cat-tag">12 Finalists</div>
+    </div>
+    <div class="cat-item reveal">
+      <div class="cat-icon">🏭</div>
+      <h3>Innovation in Roasting</h3>
+      <p>Pioneering techniques in roasting science that push the boundaries of flavor.</p>
+      <div class="cat-tag">10 Finalists</div>
+    </div>
+    <div class="cat-item reveal rv1">
+      <div class="cat-icon">📦</div>
+      <h3>Best Packaging Design</h3>
+      <p>Visually stunning, functional, and eco-conscious packaging that elevates the brand.</p>
+      <div class="cat-tag">16 Finalists</div>
+    </div>
+    <div class="cat-item reveal rv2">
+      <div class="cat-icon">⭐</div>
+      <h3>Rising Star</h3>
+      <p>Breakthrough brands less than three years old making an outsized impact.</p>
+      <div class="cat-tag">8 Finalists</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ JUDGES -->
+<section class="judges" id="judges">
+  <div style="text-align:center;margin-bottom:4rem">
+    <div class="sl reveal" style="justify-content:center">The Panel</div>
+    <h2 class="st reveal rv1">Meet our <em>judges</em></h2>
+  </div>
+  <div class="judges-grid">
+    <div class="judge reveal">
+      <div class="judge-img"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=75" alt="Elena" loading="lazy"></div>
+      <h4>Elena Marchetti</h4>
+      <div class="judge-role">Head Judge · Q-Grader</div>
+    </div>
+    <div class="judge reveal rv1">
+      <div class="judge-img"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=75" alt="Kenji" loading="lazy"></div>
+      <h4>Kenji Watanabe</h4>
+      <div class="judge-role">Flavor Scientist</div>
+    </div>
+    <div class="judge reveal rv2">
+      <div class="judge-img"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=75" alt="Amara" loading="lazy"></div>
+      <h4>Amara Osei</h4>
+      <div class="judge-role">Sustainability Lead</div>
+    </div>
+    <div class="judge reveal rv3">
+      <div class="judge-img"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=75" alt="Lucas" loading="lazy"></div>
+      <h4>Lucas Ferreira</h4>
+      <div class="judge-role">Brand & Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ TIMELINE -->
+<section class="timeline-sec" id="timeline">
+  <div style="max-width:800px;margin:0 auto">
+    <div class="sl reveal">Key Dates</div>
+    <h2 class="st reveal rv1" style="margin-bottom:3rem">The road to the <em>podium</em></h2>
+  </div>
+  <div class="tl">
+    <div class="tl-item reveal"><div class="tl-date">January 2026</div><h4>Submissions Open</h4><p>Coffee brands worldwide are invited to submit entries across all six categories.</p></div>
+    <div class="tl-item reveal"><div class="tl-date">March 2026</div><h4>First Round Tasting</h4><p>Blind cupping sessions begin. Our panel evaluates over 200 submissions.</p></div>
+    <div class="tl-item reveal"><div class="tl-date">May 2026</div><h4>Finalists Announced</h4><p>The top brands in each category are revealed to the public.</p></div>
+    <div class="tl-item reveal"><div class="tl-date">July 2026</div><h4>Final Judging</h4><p>In-person evaluation, facility tours, and sustainability audits.</p></div>
+    <div class="tl-item reveal"><div class="tl-date">September 2026</div><h4>Gala Night 🎉</h4><p>Winners announced at the Brew Elite Awards Gala in Lisbon, Portugal.</p></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ FORM -->
+<section class="form-section" id="contact">
+  <div class="form-bg-video">
+    <video autoplay muted loop playsinline>
+      <source src="https://videos.pexels.com/video-files/20772454/20772454-uhd_3840_2160_24fps.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="form-box">
+    <div class="sl reveal" style="justify-content:center">Get In Touch</div>
+    <h2 class="st reveal rv1" style="text-align:center">Hello Brew Elite,<br>my name is <em>...</em></h2>
+    <p class="reveal rv2" style="text-align:center;margin:0 auto 2.5rem;color:var(--latte);font-size:.95rem;line-height:1.7">Want to enter the awards or partner with us? We'd love to hear from you.</p>
+    <form class="reveal rv3" onsubmit="event.preventDefault();this.innerHTML='<p style=\'color:var(--gold);font-size:1.1rem;text-align:center\'>✓ We\'ve received your message — talk soon!</p>'">
+      <div class="form-group"><label>* your name</label><input type="text" placeholder="Enter your full name" required></div>
+      <div class="form-group"><label>* your company</label><input type="text" placeholder="Your coffee brand or company"></div>
+      <div class="form-group"><label>* your email</label><input type="email" placeholder="you@email.com" required></div>
+      <div class="form-group"><label>your message</label><textarea placeholder="Tell us about your brand..."></textarea></div>
+      <div style="text-align:center"><button type="submit" class="form-submit">Send Message</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="logo">Brew<span>.</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Twitter</a></li>
+    <li><a href="#">LinkedIn</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Brew Elite. All rights reserved.</div>
+</footer>
+
+<script>
+// CURSOR
+const c=document.getElementById('cursor'),cd=document.getElementById('cursorDot');
+let mx=0,my=0,cx=0,cy=0,dx=0,dy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+!function anim(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;dx+=(mx-dx)*.4;dy+=(my-dy)*.4;c.style.transform=`translate(${cx-10}px,${cy-10}px)`;cd.style.transform=`translate(${dx-3}px,${dy-3}px)`;requestAnimationFrame(anim)}();
+document.querySelectorAll('a,button,.wr,.cat-item,.judge').forEach(el=>{el.addEventListener('mouseenter',()=>c.classList.add('hover'));el.addEventListener('mouseleave',()=>c.classList.remove('hover'))});
+
+// PRELOADER
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('preloader').classList.add('done'),2400));
+
+// NAV SCROLL
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>80));
+
+// SCROLL REVEAL
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// PARALLAX
+const pxBg=document.getElementById('pxBg');
+if(pxBg)window.addEventListener('scroll',()=>{const r=pxBg.parentElement.getBoundingClientRect();pxBg.style.transform=`translateY(${r.top/window.innerHeight*60}px)`});
+
+// SMOOTH ANCHOR
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>
