@@ -23,7 +23,7 @@ $rings = [
     <div class="c-x">
         <div class="mb-12 text-center">
             <p class="eyebrow justify-center">Creative Ecosystem</p>
-            <h2 class="title-display mt-5">Tools I <span class="grad-text">Work With</span></h2>
+            <h2 class="title-display mt-5" data-mask-reveal>Tools I <span class="grad-text">Work With</span></h2>
         </div>
 
         {{-- Desktop: animated orbit (JS-driven) --}}

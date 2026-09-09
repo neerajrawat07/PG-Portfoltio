@@ -6,7 +6,7 @@
 
         <nav class="nav-links hidden items-center gap-7 lg:flex" aria-label="Primary">
             @foreach (\App\Data\Portfolio::nav() as $link)
-                <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+                <a href="{{ $link['href'] }}" data-nav-target="{{ str_replace('#', '', $link['href']) }}">{{ $link['label'] }}</a>
             @endforeach
         </nav>
 

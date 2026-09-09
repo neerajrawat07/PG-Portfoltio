@@ -2,12 +2,12 @@
 <section class="sec relative overflow-hidden">
     <!-- 3D floating geometry (Three.js, lazily mounted) -->
     <div class="absolute inset-0 pointer-events-none" id="skillsCanvas" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute -left-40 top-1/3 h-[26rem] w-[26rem] rounded-full bg-electric-cyan/10 blur-[120px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -left-40 top-1/3 h-[26rem] w-[26rem] rounded-full bg-electric-cyan/10 blur-[120px]" data-parallax data-parallax-speed="12" aria-hidden="true"></div>
 
     <div class="c-x relative">
         <div class="max-w-2xl">
             <p class="eyebrow">Professional Highlights</p>
-            <h2 class="title-display mt-5">Skills &amp; <span class="grad-text">Capabilities</span></h2>
+            <h2 class="title-display mt-5" data-mask-reveal>Skills &amp; <span class="grad-text">Capabilities</span></h2>
             <p class="mt-5 text-ink-soft">The craft behind the campaigns — from strategy and management to the tools that make it all run.</p>
         </div>
 

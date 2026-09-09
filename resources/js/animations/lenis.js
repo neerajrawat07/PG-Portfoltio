@@ -27,6 +27,9 @@ export default function initLenis() {
         });
     });
 
+    // Expose the instance so scroll-affording widgets (back-to-top) can reuse it.
+    window.__lenis = lenis;
+
     // Smooth-scroll in-page anchors instead of the default jump.
     document.addEventListener('click', (e) => {
         const anchor = e.target.closest('a[href^="#"]');

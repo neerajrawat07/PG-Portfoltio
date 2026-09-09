@@ -4,7 +4,7 @@
         <div class="mb-14 flex flex-wrap items-end justify-between gap-6">
             <div>
                 <p class="eyebrow">What I Offer</p>
-                <h2 class="title-display mt-5">Expert Marketing <span class="grad-text">Services</span></h2>
+                <h2 class="title-display mt-5" data-mask-reveal>Expert Marketing <span class="grad-text">Services</span></h2>
             </div>
             <p class="max-w-xs text-sm leading-relaxed text-ink-muted">Nine ways I help brands show up, sound right, and grow on social.</p>
         </div>

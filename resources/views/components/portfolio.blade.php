@@ -5,7 +5,7 @@
         <div class="mb-14 flex flex-wrap items-end justify-between gap-6">
             <div>
                 <p class="eyebrow">Selected Projects</p>
-                <h2 class="title-display mt-5">Curated <span class="grad-text">Works</span></h2>
+                <h2 class="title-display mt-5" data-mask-reveal>Curated <span class="grad-text">Works</span></h2>
             </div>
 
             <div class="work-filters" role="group" aria-label="Filter projects">

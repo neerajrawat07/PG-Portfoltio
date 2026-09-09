@@ -43,6 +43,9 @@
     @stack('head')
 </head>
 <body class="{{ $bodyClass }}">
+    <!-- Scroll progress (gradient bar tracks page scroll) -->
+    <div class="scroll-progress" id="scrollProgress"><span class="scroll-progress__fill" aria-hidden="true"></span></div>
+
     <!-- Film grain -->
     <div class="grain" aria-hidden="true"></div>
 
@@ -64,6 +67,13 @@
     @unless($bodyClass === 'case-study')
         @include('components.footer')
     @endunless
+
+    <!-- Back to top -->
+    <button class="to-top" id="toTop" aria-label="Back to top">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m5 15 7-7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
 
     @stack('scripts')
 </body>

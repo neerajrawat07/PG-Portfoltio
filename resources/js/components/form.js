@@ -57,11 +57,10 @@ export default function initForm() {
         setBusy(true);
 
         try {
-            const payload = Object.fromEntries(new FormData(form));
+            const payload = new FormData(form);
             const res = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify(payload),
+                body: payload,
             });
             const json = await res.json();
 

@@ -1,11 +1,11 @@
 <?php $results = \App\Data\Portfolio::caseStudy()['results']; ?>
 <section class="sec relative overflow-hidden">
-    <div class="pointer-events-none absolute left-1/2 top-0 h-[26rem] w-[56rem] -translate-x-1/2 rounded-full bg-electric-violet/10 blur-[130px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute left-1/2 top-0 h-[26rem] w-[56rem] -translate-x-1/2 rounded-full bg-electric-violet/10 blur-[130px]" data-parallax data-parallax-speed="8" aria-hidden="true"></div>
 
     <div class="c-x relative">
         <div class="mx-auto max-w-2xl text-center">
             <p class="eyebrow justify-center">Viral Results</p>
-            <h2 class="title-display mt-5">Content that <span class="grad-text">Performs</span></h2>
+            <h2 class="title-display mt-5" data-mask-reveal>Content that <span class="grad-text">Performs</span></h2>
             <p class="mx-auto mt-4 max-w-lg text-ink-soft">Real numbers behind the campaigns — lift in reach, engagement and community growth.</p>
         </div>
 

@@ -5,7 +5,7 @@
             <!-- LEFT : sticky heading -->
             <div class="lg:sticky lg:top-28 lg:self-start">
                 <p class="eyebrow">My Career Journey</p>
-                <h2 class="title-display mt-5">Experience &amp; <span class="grad-text">Milestones</span></h2>
+                <h2 class="title-display mt-5" data-mask-reveal>Experience &amp; <span class="grad-text">Milestones</span></h2>
                 <p class="mt-5 max-w-sm text-ink-soft">From my BCA foundation to leading end-to-end social strategies for high-growth brands.</p>
 
                 <div class="mt-10 flex items-center gap-6">

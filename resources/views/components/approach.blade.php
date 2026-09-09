@@ -5,7 +5,7 @@
             <!-- LEFT : label + heading + points -->
             <div class="lg:sticky lg:top-28">
                 <p class="eyebrow">{{ $approach['eyebrow'] }}</p>
-                <h2 class="title-display mt-5">
+                <h2 class="title-display mt-5" data-mask-reveal>
                     {{ $approach['titleA'] }}<br />
                     <span class="grad-text">{{ $approach['titleB'] }}</span>
                 </h2>

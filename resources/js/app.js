@@ -2,6 +2,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 
 import { initHero, revealGroup } from './animations/scroll';
+import initParallax from './animations/parallax';
 import initReveals from './components/reveal';
 import initCursor from './components/cursor';
 import initPreloader from './components/preloader';
@@ -13,6 +14,9 @@ import initOrbits from './animations/orbit';
 import initTestimonials from './components/testimonials';
 import initServicesPreview from './components/servicesPreview';
 import initForm from './components/form';
+import initScrollProgress from './components/scrollProgress';
+import initActiveNav from './components/activeNav';
+import initSplitReveals from './components/splitReveal';
 
 import { mountScene } from './three/core';
 import heroScene from './three/heroScene';
@@ -42,10 +46,13 @@ function boot() {
 
     // Scroll reveals + counters (IntersectionObserver).
     initReveals();
+    initSplitReveals();
     initCounters();
+    initParallax();
 
     // Navigation & pointer flair.
     initNavbar();
+    initActiveNav();
     initCursor();
 
     // Section interactivity.
@@ -54,6 +61,7 @@ function boot() {
     initTestimonials();
     initServicesPreview();
     initForm();
+    initScrollProgress();
     initOrbits();
 
     // Three.js scenes — only mounted if their container exists.

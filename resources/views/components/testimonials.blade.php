@@ -3,7 +3,7 @@
     <div class="c-x">
         <div class="mb-12 text-center">
             <p class="eyebrow justify-center">Client Stories</p>
-            <h2 class="title-display mt-5">What Clients <span class="grad-text">Say</span></h2>
+            <h2 class="title-display mt-5" data-mask-reveal>What Clients <span class="grad-text">Say</span></h2>
         </div>
 
         <div class="relative mx-auto max-w-3xl" id="testiSlider" data-l-reveal="fade">
