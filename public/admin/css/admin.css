@@ -1,0 +1,762 @@
+/* ================================
+   Derjoint Healthcare Admin Dashboard CSS
+   ================================ */
+
+/* Global Styles */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --sidebar-width: 260px;
+    --header-height: 70px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* Admin Wrapper */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ================================
+   Sidebar Styles
+   ================================ */
+.admin-sidebar {
+    width: var(--sidebar-width);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: var(--transition);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar.collapsed {
+    margin-left: calc(-1 * var(--sidebar-width));
+}
+
+.sidebar-brand {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-brand .brand-link {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+}
+
+.sidebar-brand .brand-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sidebar-nav {
+    padding: 20px 0;
+}
+
+.sidebar-nav .nav {
+    list-style: none;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left-color: white;
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 10px;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-nav .nav-link .fa-chevron-down {
+    margin-left: auto;
+    font-size: 12px;
+    transition: var(--transition);
+}
+
+.sidebar-nav .nav-link[aria-expanded="true"] .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.sidebar-nav .submenu {
+    list-style: none;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+
+.sidebar-nav .submenu .nav-link {
+    padding-left: 50px;
+    font-size: 14px;
+}
+
+.sidebar-nav .submenu .nav-link i {
+    font-size: 8px;
+}
+
+/* ================================
+   Main Content Area
+   ================================ */
+.admin-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+.admin-wrapper.sidebar-collapsed .admin-content {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* ================================
+   Header Styles
+   ================================ */
+.admin-header {
+    background: white;
+    height: var(--header-height);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--dark-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.sidebar-toggle:hover {
+    color: var(--primary-color);
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-dropdown {
+    position: relative;
+}
+
+.header-icon {
+    position: relative;
+    color: var(--dark-color);
+    font-size: 20px;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.header-icon .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--danger-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark-color);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: var(--transition);
+}
+
+.header-user:hover {
+    background: var(--light-color);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+.dropdown-user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+}
+
+/* ================================
+   Main Content Styles
+   ================================ */
+.admin-main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* Dashboard Header */
+.dashboard-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+/* ================================
+   Stats Cards
+   ================================ */
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats-info h6 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.stats-info h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stats-description {
+    font-size: 13px;
+    color: #6c757d;
+    margin: 0;
+}
+
+.stats-icon {
+    font-size: 48px;
+    opacity: 0.2;
+}
+
+/* Stats Card Variants */
+.stats-card-primary {
+    border-left: 4px solid var(--primary-color);
+}
+
+.stats-card-primary .stats-value {
+    color: var(--primary-color);
+}
+
+.stats-card-primary .stats-icon {
+    color: var(--primary-color);
+}
+
+.stats-card-success {
+    border-left: 4px solid var(--success-color);
+}
+
+.stats-card-success .stats-value {
+    color: var(--success-color);
+}
+
+.stats-card-success .stats-icon {
+    color: var(--success-color);
+}
+
+.stats-card-warning {
+    border-left: 4px solid var(--warning-color);
+}
+
+.stats-card-warning .stats-value {
+    color: var(--warning-color);
+}
+
+.stats-card-warning .stats-icon {
+    color: var(--warning-color);
+}
+
+.stats-card-danger {
+    border-left: 4px solid var(--danger-color);
+}
+
+.stats-card-danger .stats-value {
+    color: var(--danger-color);
+}
+
+.stats-card-danger .stats-icon {
+    color: var(--danger-color);
+}
+
+.stats-card-info {
+    border-left: 4px solid var(--info-color);
+}
+
+.stats-card-info .stats-value {
+    color: var(--info-color);
+}
+
+.stats-card-info .stats-icon {
+    color: var(--info-color);
+}
+
+.stats-card-secondary {
+    border-left: 4px solid #6c757d;
+}
+
+.stats-card-secondary .stats-value {
+    color: #6c757d;
+}
+
+.stats-card-secondary .stats-icon {
+    color: #6c757d;
+}
+
+/* ================================
+   Card Styles
+   ================================ */
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: none;
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin: 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* ================================
+   Activity List
+   ================================ */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--light-color);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.activity-item:hover {
+    background: #e9ecef;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    margin: 0;
+    font-size: 14px;
+    color: var(--dark-color);
+}
+
+.activity-time {
+    font-size: 12px;
+    margin: 0;
+}
+
+/* ================================
+   Quick Actions
+   ================================ */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-action-btn {
+    text-align: left;
+    transition: var(--transition);
+}
+
+.quick-action-btn:hover {
+    transform: translateX(5px);
+}
+
+/* ================================
+   Profile Page Styles
+   ================================ */
+.profile-card {
+    text-align: center;
+}
+
+.profile-image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-color);
+}
+
+.profile-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.profile-image-wrapper:hover .profile-image-overlay {
+    opacity: 1;
+}
+
+.profile-image-overlay i {
+    color: white;
+    font-size: 30px;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-top: 15px;
+}
+
+.profile-email {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.profile-stats {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.stat-item h5 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* ================================
+   Form Styles
+   ================================ */
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px 15px;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* ================================
+   Footer Styles
+   ================================ */
+.admin-footer {
+    background: white;
+    padding: 20px 30px;
+    border-top: 1px solid #e9ecef;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.footer-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+/* ================================
+   Responsive Design
+   ================================ */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+
+    .admin-sidebar.show {
+        margin-left: 0;
+    }
+
+    .admin-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .header-title {
+        font-size: 18px;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .admin-main {
+        padding: 20px 15px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .stats-card-body {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stats-icon {
+        margin-top: 15px;
+    }
+}
+
+/* ================================
+   Utility Classes
+   ================================ */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.bg-success {
+    background-color: var(--success-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.bg-danger {
+    background-color: var(--danger-color) !important;
+}
+
+.text-warning {
+    color: var(--warning-color) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-color) !important;
+}
+
+.text-info {
+    color: var(--info-color) !important;
+}
+
+.bg-info {
+    background-color: var(--info-color) !important;
+}
+
+/* ================================
+   Scrollbar Styling
+   ================================ */
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ================================
+   Animation Classes
+   ================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+.slide-in-up {
+    animation: slideInUp 0.5s ease;
+}
