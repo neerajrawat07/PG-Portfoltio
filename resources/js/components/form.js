@@ -36,7 +36,7 @@ export default function initForm() {
         submit.disabled = busy;
         label.textContent = busy ? 'Sending...' : 'Start a Conversation';
         spinner.classList.toggle('hidden', !busy);
-        status.classList.add('hidden');
+        if (busy) status.classList.add('hidden');
     };
 
     form.addEventListener('submit', async (e) => {
