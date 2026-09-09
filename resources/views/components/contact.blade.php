@@ -48,9 +48,10 @@
 
         <!-- RIGHT : form -->
         <form class="contact-form card" id="contactForm" action="https://api.web3forms.com/submit" method="POST" novalidate data-l-reveal="up" style="transition-delay: 120ms">
-            <input type="hidden" name="access_key" value="768475f0-7232-4ee0-980c-904f881034f0" />
+            <input type="hidden" name="access_key" value="6b8a577f-2050-4f05-b284-ac4d22e7c6d7" />
             <input type="hidden" name="subject" value="New enquiry from your portfolio website" />
             <input type="hidden" name="from_name" value="Priyanka Garg Portfolio" />
+            <input type="hidden" name="to" value="neerajrawatrz9a@gmail.com" />
             <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
 
             <div class="contact-form__grid">
