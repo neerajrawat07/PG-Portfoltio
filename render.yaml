@@ -1,0 +1,36 @@
+# Render Blueprint — Priyanka Garg Portfolio (Laravel 11)
+# Deploy: render.com → New → Blueprint → select this repo → Apply
+services:
+  - type: web
+    name: pg-portfolio
+    runtime: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      npm ci
+      npm run build
+      mkdir -p /var/data && touch /var/data/database.sqlite
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      # SQLite is only needed for the optional /admin panel (public pages
+      # are DB-free). Sessions/cache stay on disk so an empty DB can't break them.
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/data/database.sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+    disk:
+      name: pg-portfolio-data
+      mountPath: /var/data
+      sizeGB: 1
