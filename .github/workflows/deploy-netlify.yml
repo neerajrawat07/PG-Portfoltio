@@ -1,0 +1,78 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # PHP for the Laravel render (Netlify itself can't run PHP — we build here).
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_sqlite, zip, gd
+          tools: composer:v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+          npm ci
+
+      - name: Build front-end assets (Vite)
+        run: npm run build
+
+      - name: Prepare .env (file sessions/cache — public pages are DB-free)
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+          sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
+          sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env || true
+          sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env || true
+          touch database/database.sqlite
+
+      - name: Capture pages as static HTML
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8123 &
+          SERVER_PID=$!
+          sleep 5
+          curl -fsS -o /tmp/netlify-home.html http://127.0.0.1:8123/
+          curl -fsS -o /tmp/netlify-case.html http://127.0.0.1:8123/case-study/avni
+          kill $SERVER_PID || true
+          wait $SERVER_PID 2>/dev/null || true
+
+      - name: Assemble dist/
+        run: |
+          rm -rf dist
+          cp -r public dist
+          rm -f dist/.htaccess dist/index.php
+          rm -rf dist/admin
+          mkdir -p dist/case-study/avni
+          sed -E "s|http://127\.0\.0\.1:8123||g" /tmp/netlify-home.html > dist/index.html
+          sed -E "s|http://127\.0\.0\.1:8123||g" /tmp/netlify-case.html > dist/case-study/avni/index.html
+          printf '/case-study-avni  /case-study/avni  301\n' > dist/_redirects
+          test -f dist/index.html && echo "dist assembled OK"
+
+      - name: Deploy to Netlify
+        run: >
+          test -n "$NETLIFY_AUTH_TOKEN" ||
+          (echo "::error::Set NETLIFY_AUTH_TOKEN in repo Secrets (Settings -> Secrets -> Actions)";
+           exit 1);
+          test -n "$NETLIFY_SITE_ID" ||
+          (echo "::error::Set NETLIFY_SITE_ID in repo Secrets (your Netlify site's API ID)";
+           exit 1);
+          npx --yes netlify-cli deploy --prod --dir=dist --site="$NETLIFY_SITE_ID"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
