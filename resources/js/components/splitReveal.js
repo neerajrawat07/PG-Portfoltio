@@ -53,7 +53,7 @@ function splitWords(root) {
                    background-clip:text across the nested word boxes. */
                 if (/(^|\s)grad-text(-\S+)?(\s|$)/.test(node.className || '')) {
                     node.dataset.maskKept = '1';
-                    node.replaceWith(makeWord(node, counter));
+                    wrapElementInWord(node, counter);
                 } else {
                     rebuild(node);
                 }
@@ -94,4 +94,25 @@ function makeWord(child, counter) {
 
     mask.appendChild(inner);
     return mask;
+}
+
+/**
+ * Wrap an existing element (e.g. a .grad-text span) in a word-mask. The
+ * mask is inserted first, THEN the element is moved inside — never
+ * `replaceWith(wrapper)` where the wrapper already contains the node,
+ * which throws HierarchyRequestError ("new child contains the parent").
+ */
+function wrapElementInWord(el, counter) {
+    const mask = document.createElement('span');
+    mask.className = 'mask-word';
+
+    const inner = document.createElement('span');
+    inner.className = 'mask-word__inner';
+    inner.style.transitionDelay = `${(counter.n++ * 0.045).toFixed(3)}s`;
+    mask.appendChild(inner);
+
+    // mask does NOT contain el yet, so this swap is legal…
+    el.replaceWith(mask);
+    // …then move el inside the mask.
+    inner.appendChild(el);
 }

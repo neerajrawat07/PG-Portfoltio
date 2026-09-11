@@ -1754,6 +1754,9 @@
         align-items: start;
     }
     .contact-form__group { min-width: 0; align-self: start; }
+    /* Vertical spacing only for stacked (full-width) groups — the side-by-side
+       grid groups must stay level, so zero out the margin inside .contact-form__grid. */
+    .contact-form__grid .contact-form__group + .contact-form__group { margin-top: 0; }
     .contact-form__group + .contact-form__group { margin-top: 1.25rem; }
     .contact-form__group .contact-field { margin-top: 0; }
     textarea.contact-field { resize: vertical; min-height: 8rem; }
